@@ -40,6 +40,7 @@ echo "      -d|--data_file        file_name       data file to be analyzed"
 echo ""
 echo "      -f|--first_ev         f_ev            first (as written to file) event that will be analyzed; default is 1"
 echo "      -l|--last_ev          l_ev            last  (as written to file) event that will be analyzed; default is 9999"
+echo "      -m|--mode             mode            dimping mode, options 1 or 2;  default is 1"
 echo "      -eb|--ieb_id          ieb_id          selects sm barrel id (1...36); default is all"
 #echo "      -me|--memErrors       0-1             show mem integrity problems; default is 0"
 echo "      -cry|--cryDigi        ic              digis from channel ic will be shown"
@@ -72,6 +73,7 @@ pnString="false";
 
 trpr=0;
 
+mode=1
 first_event=1
 last_event=9999
 
@@ -97,7 +99,10 @@ last_event=9999
       -l|--last_ev)
                 last_event="$2"
                 ;;
-
+      
+      -m|--mode)
+	        mode="$2"
+		;;
 
       -eb|--ieb_id)
                 ieb="$2"
@@ -211,7 +216,7 @@ include "EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi"
         untracked bool pnDigi       = $pnString
         untracked bool tpDigi       = $tpString
 
-       untracked int32 mode           = 2
+       untracked int32 mode           = $mode
  
          # if mode is 1 specify these parameters
 	 untracked int32 numChannel     = $cry_ic
