@@ -43,9 +43,11 @@ EcalDigiDumperModule::EcalDigiDumperModule(const edm::ParameterSet& ps) {
   eeDigiCollection_ = ps.getParameter<std::string>("eeDigiCollection");
   digiProducer_   = ps.getParameter<std::string>("digiProducer");
   
-  cryDigi         = ps.getUntrackedParameter<bool>("cryDigi",true);
+  cryDigi        = ps.getUntrackedParameter<bool>("cryDigi",true);
   pnDigi         = ps.getUntrackedParameter<bool>("pnDigi",true);
   tpDigi         = ps.getUntrackedParameter<bool>("tpDigi",true);
+  fedIsGiven     = ps.getUntrackedParameter<bool>("fedIsGiven");
+  ebIsGiven      = ps.getUntrackedParameter<bool>("ebIsGiven");
   
   mode           = ps.getUntrackedParameter<int>("mode");
   numChannel     = ps.getUntrackedParameter<int>("numChannel");
@@ -54,9 +56,12 @@ EcalDigiDumperModule::EcalDigiDumperModule(const edm::ParameterSet& ps) {
   listChannels   = ps.getUntrackedParameter<std::vector<int> >("listChannels");
   listTowers     = ps.getUntrackedParameter<std::vector<int> >("listTowers");
   listPns        = ps.getUntrackedParameter<std::vector<int> >("listPns");
-  
+
+  ebFedIds       = ps.getUntrackedParameter<std::vector<int> >("fedID");
+  ebIds          = ps.getUntrackedParameter<std::vector<int> >("ebID");
   //realFeds       = ps.getUntrackedParameter<std::vector<int> >("orderedFedList");
   requestedFeds  = ps.getUntrackedParameter<std::vector<int> >("requestedFeds");
+  requestedEbs   = ps.getUntrackedParameter<std::vector<int> >("requestedEbs");
 }
 
 //=========================================================================
@@ -74,6 +79,19 @@ void EcalDigiDumperModule::beginJob(const edm::EventSetup& c) {
 //========================================================================
 void EcalDigiDumperModule::analyze( const edm::Event & e, const  edm::EventSetup& c) {
   //========================================================================
+
+  //Check whether FED id or EB id is givveneb
+  if ( !fedIsGiven ) {
+    requestedFeds.clear();
+    //for (int i = requestedEbs.begin(); i!=requestedEbs.end(); ++i) {
+    for (unsigned int i = 0; i < requestedEbs.size(); ++i) {
+      int fed = ebToFedId( requestedEbs[i], ebIds, ebFedIds);
+      requestedFeds.push_back(fed);
+    }
+  }
+
+  fedIsGiven = true;
+  ebIsGiven  = false;
 
   inputIsOk = true;
   // consistency checks checks
@@ -324,6 +342,19 @@ void EcalDigiDumperModule::readPNDigis(edm::Handle<EcalPnDiodeDigiCollection> PN
       }
   }
 }
+
+//Function to convert from EB to FED id
+int EcalDigiDumperModule::ebToFedId(int EB, std::vector<int> ebID, std::vector<int> fedID) {
+  int fed = 0;
+  for (int i=0; i<36; ++i) {
+    int eb = ebID[i];
+    if ( eb == EB ) {
+      fed   = fedID[i];
+    }
+  }
+  return fed;
+}
+
 //===================================================
 void EcalDigiDumperModule::endJob() {
 //==================================================
