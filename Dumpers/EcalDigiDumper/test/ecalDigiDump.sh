@@ -41,7 +41,8 @@ echo ""
 echo "      -f|--first_ev         f_ev            first (as written to file) event that will be analyzed; default is 1"
 echo "      -l|--last_ev          l_ev            last  (as written to file) event that will be analyzed; default is 9999"
 echo "      -m|--mode             mode            dimping mode, options 1 or 2;  default is 1"
-echo "      -eb|--ieb_id          ieb_id          selects sm barrel id (1...36); default is all"
+echo "      -fed|--fed_id          fed_id          select FED id (601...654); default is all"
+echo "      -eb|--ieb_id          ieb_id          selects sm barrel id (-1...-18,1...18); default is all"
 #echo "      -me|--memErrors       0-1             show mem integrity problems; default is 0"
 echo "      -cry|--cryDigi        ic              digis from channel ic will be shown"
 echo "      -tt|--triggerTower    tt              digis from channel whole tower tt will be shown"
@@ -62,11 +63,14 @@ cfg_path="$conf_dir"
 
 
 ieb=1;
+fed=601;
 
 cry_ic=1;
 tt_id=1;
 cryString="false";
 towerString="false";
+fedString="false"
+ebString="false"
 
 pn_num=1;
 pnString="false";
@@ -79,7 +83,7 @@ last_event=9999
 
 
 
-  while [ $# -gt 0 ]; do    # FinchÈ ci sono parametri . . .
+  while [ $# -gt 0 ]; do    # FinchÅÈ ci sono parametri . . .
     case "$1" in
 
       -p|--path_file)
@@ -104,8 +108,14 @@ last_event=9999
 	        mode="$2"
 		;;
 
+      -fed|--fed)
+	        fed="$2"
+		fedString="true"
+		;;
+
       -eb|--ieb_id)
                 ieb="$2"
+		ebString="true"
                 ;;
 
       -me|--memErrors)
@@ -204,17 +214,22 @@ include "EventFilter/EcalRawToDigiDev/data/EcalUnpackerData.cfi"
 
 # verbosity =0:  only headings
      module digi = EcalDigiDumperModule{
+        include "Dumpers/EcalDigiDumper/data/ecalFedEBMapping.cfi"
+
         untracked int32 verbosity      = 1
 
         # selection on sm number in the barrel (1... 36; 1 with tb unpacker)
         # if not specified or value set to -1, no selection will be applied
         #untracked int32 ieb_id     = 1
         #untracked int32 ieb        = $ieb
-        untracked vint32 requestedFeds  = {$ieb}
+        untracked vint32 requestedFeds  = {$fed}
+        untracked vint32 requestedEbs  = {$ieb}
 
         untracked bool cryDigi      = $cryString
         untracked bool pnDigi       = $pnString
         untracked bool tpDigi       = $tpString
+        untracked bool fedIsGiven   = $fedString
+        untracked bool ebIsGiven   = $ebString
 
        untracked int32 mode           = $mode
  
