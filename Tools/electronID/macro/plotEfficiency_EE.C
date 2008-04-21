@@ -35,7 +35,7 @@ void plotEfficiency_EE() {
   TCut ee_trkIso = "(IsoKFTrackDR030 - IsoKFTrackDR005)/Pt<0.2";
   TCut ee_EseedPout = "ESeed/Trk_P_Out>0.9";
   // additional cut for Tight criteria
-  TCut ee_EmHadIso = "(IsoEmCaloRecHitDR030 + IsoHadCaloRecHitDR030 - ESC)/ESC<0.05";   
+  TCut ee_EmHadIso = "(IsoEmCaloRecHitDR030 + IsoHadCaloRecHitDR030 - ESC)/ESC<0.1";   
 
 
   TCut ee_id = ee_deta && ee_dphi && ee_sEE && ee_trkIso && ee_EseedPout; // && ee_EmHadIso;

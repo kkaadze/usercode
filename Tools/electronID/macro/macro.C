@@ -69,7 +69,7 @@ void macro(TString name){
   TCut ee_trkIso = "(IsoKFTrackDR030 - IsoKFTrackDR005)/Pt<0.2"; 
   TCut ee_EseedPout = "ESeed/Trk_P_Out>0.9"; //0.96";
   //--------- this is for tight criteria
-  TCut ee_EmHadIso = "(IsoEmCaloRecHitDR030 + IsoHadCaloRecHitDR030 - ESC)/ESC<0.05";    // a la d0 variable
+  TCut ee_EmHadIso = "(IsoEmCaloRecHitDR030 + IsoHadCaloRecHitDR030 - ESC)/ESC<0.1";    // a la d0 variable
 
   //++++ 
   //  TCut ee_HadFrac = "IsoHadCaloRecHitDR030/(IsoEmCaloRecHitDR030+IsoHadCaloRecHitDR030)<0.12";
