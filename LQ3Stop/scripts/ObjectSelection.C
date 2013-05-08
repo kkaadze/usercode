@@ -1,4 +1,17 @@
 ObjectSelection(){
+  
+  //==================================================================
+  // ====== Vertex selection
+  //==================================================================
+
+  bool goodVertex = true;
+  goodVertex &= !(VertexIsFake->at(ivtx));
+  goodVertex &= VertexNDF->at(v) > 4;
+  goodVertex &= TMath::Abs(VertexZ->at(v)) < 24;
+  goodVertex &= TMath::Abs(VertexRho->at(v)) < 2;
+  
+  // muons and taus (electrons and taus) must come fromt the same vertex
+
   //==================================================================
   //  =====MuTau Channel
   //==================================================================
