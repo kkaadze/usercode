@@ -35,6 +35,7 @@ ObjectSelection(){
     
   bool goodMuon = true;
   goodMuon &= (MuonPt->at(m)>30); //pT cut in GeV
+  goodMuon &= TMath::Abs(MuonEta->at(m)) < 2.1; // eta cut
   goodMuon &= (MuonIsPF->at(m)==1); //require PF muon
   goodMuon &= (MuonPassID->at(m)==1); //require global, chi2 < 10, chamber hits
   goodMuon &= (MuonStationMatches->at(m)>=1); //require station hits
@@ -49,7 +50,8 @@ ObjectSelection(){
   bool goodTau = true;
   goodTau &= (HPSTauPt->at(t)>30); //require pT > 30 GeV
   goodTau &= (fabs(HPSTauEta->at(t))<2.3); //require eta < 2.3
-  goodTau &= (HPSTauLooseCombinedIsolationDeltaBetaCorrDiscr->at(t)==1); //require loose isolation
+  //  goodTau &= (HPSTauLooseCombinedIsolationDeltaBetaCorrDiscr->at(t)==1); //require loose isolation
+  goodTau &= (HPSTaubyLooseCombinedIsolationDeltaBetaCorr3Hits->at(t)==1); //require loose 3Hit isolation
   goodTau &= (HPSTauAgainstElectronLooseDiscr->at(t)==1); //require loose electron-tau discrimination
   goodTau &= (HPSTauagainstMuonTight2->at(t)==1); //require tight (version 2) muon-tau discrimination
   
@@ -110,7 +112,8 @@ ObjectSelection(){
   bool goodTau = true;
   goodTau &= (HPSTauPt->at(t)>30); //require pT > 30 GeV
   goodTau &= (fabs(HPSTauEta->at(t))<2.3); //require eta < 2.3
-  goodTau &= (HPSTauLooseCombinedIsolationDeltaBetaCorrDiscr->at(t)==1); //require loose isolation
+  //  goodTau &= (HPSTauLooseCombinedIsolationDeltaBetaCorrDiscr->at(t)==1); //require loose isolation
+  goodTau &= (HPSTaubyLooseCombinedIsolationDeltaBetaCorr3Hits->at(t)==1); //require loose 3Hit isolation
   goodTau &= (HPSTauAgainstElectronMVADiscr->at(t)==1); //require loose electron-tau discrimination
   goodTau &= (HPSTauagainstMuonLoose2->at(t)==1); //require tight (version 2) muon-tau discrimination
   
