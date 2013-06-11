@@ -106,7 +106,7 @@ ObjectSelection(){
   bool goodEle = true;
   goodEle &= (ElectronPt->at(e)>30);
   goodEle &= (fabs(ElectronEta->at(e))<1.444||fabs(ElectronEta->at(e))>1.56&&fabs(ElectronEta->at(e))<2.5);  //
-  goodEle &= (ElectronPassEGammaIDMedium->at(e)==1); //
+  goodEle &= (ElectronPassEGammaIDMedium->at(e)==1023); //1023 is full ID/isolation, 895 is fullID and anti-iso
 
     //  ----- Tau Selection
   bool goodTau = true;
